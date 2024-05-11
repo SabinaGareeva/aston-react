@@ -1,31 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import ChildComponent from "./components/ChildComponent";
 import "./App.css";
+import ListComponent from "./components/ListComponent";
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = { inputValue: "", submittedValue: "" };
+    this.inputRef = React.createRef();
     console.log("Constructor called");
   }
   componentDidMount() {
@@ -44,6 +26,9 @@ class App extends Component {
     event.preventDefault();
     this.setState({ submittedValue: this.state.inputValue });
   };
+  handleFocusInput = () => {
+    this.inputRef.current.focus();
+  };
   render() {
     console.log("Render called");
     return (
@@ -51,14 +36,19 @@ class App extends Component {
         <h1>Class Component Lifecycle Demo</h1>
         <form onSubmit={this.handleSubmit}>
           <input
+            ref={this.inputRef}
             value={this.state.inputValue}
             onChange={this.handleChange}
             placeholder="Enter text"
           />
-          <button>Submit</button>
+          <button disabled={this.state.inputValue === "react" ? true : false}>
+            Submit
+          </button>
         </form>
+        <button onClick={this.handleFocusInput}>Focus</button>
         <p>Submitted value:{this.state.submittedValue}</p>
-        <ChildComponent text={"Hello World"} number={42}/>
+        <ChildComponent text={"Hello World"} number={42} />
+        <ListComponent />
       </>
     );
   }
